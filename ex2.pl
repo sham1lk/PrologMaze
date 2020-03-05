@@ -6,11 +6,8 @@ f(9,9).
 
 o(0,1).
 
+
 p(1,1).
-p(1,8).
-p(6,8).
-
-
 
 % RIGHT
 update1(  X, Y, right, X_new, Y  ) :-
@@ -21,31 +18,36 @@ update1(  X, Y, right, X_new, Y  ) :-
 % LEFT
 update2( X,Y, left, X_new, Y ) :-
     X_new is X - 1,
-    legal(X_new,Y).
+    legal(X_new,Y),
+     write("left to ("), write(X_new), write(","), write(Y), write_ln(")").
 
 % DOWN
 update3(  X,Y, down, X, Y_new  ) :-
     Y_new is Y - 1,
-    legal(X,Y_new).
+    legal(X,Y_new),
+    write("down to ("), write(X), write(","), write(Y_new), write_ln(")").
 
 % UP
 update4(  X,Y, up, X, Y_new  ) :-
     Y_new is Y + 1,
-    legal(X,Y_new).
+    legal(X,Y_new),
+     write("up to ("), write(X), write(","), write(Y_new), write_ln(")").
 
 % GORESONTAL PASS
 update5(  X,Y, pass_g, X, Y_new) :-
     p(X,Y_any),
     not(is_org_g(X,Y,Y_any)),
     Y_new is Y_any,
-    legal(X,Y_new).
+    legal(X,Y_new),
+     write("pass to ("), write(X), write(","), write(Y_new), write_ln(")").
 
 % VERTICAL PASS
 update6(  X,Y, pass_v, X_new, Y) :-
     p(X_any,Y),
     not(is_org_v(X,X_any,Y)),
     X_new is X_any,
-    legal(X_new,Y).
+    legal(X_new,Y),
+     write("pass to ("), write(X_new), write(","), write(Y), write_ln(")").
 
 
 % DIAGONAL PASS
@@ -57,8 +59,8 @@ update7( X,Y, pass_d, X_new,Y_new) :-
     not(is_org_d(X,Y,D)),
     X_new is X_any,
     Y_new is Y_any,
-    legal(X_new,Y_new).
-
+    legal(X_new,Y_new),
+     write("pass to ("), write(X_new), write(","), write(Y_new), write_ln(")").
 
 update8( X,Y, pass_d, X_new,Y_new) :-
     p(X_any,Y_any),
@@ -68,7 +70,8 @@ update8( X,Y, pass_d, X_new,Y_new) :-
     not(is_org_d1(X,Y,D)),
     X_new is X_any,
     Y_new is Y_any,
-    legal(X_new,Y_new).
+    legal(X_new,Y_new),
+     write("pass to ("), write(X_new), write(","), write(Y_new), write_ln(")").
 
 
 
@@ -99,24 +102,27 @@ legal( X,Y ) :-
     X < 10,
     Y < 10,
     Y >= 0,
-    \+ o(X,Y).
+    \+ o(X,Y),
+    \+ visited(X,Y).
 
 move(X,Y) :-
-    f(X,Y).
+    f(X,Y),
+    min(N),
+    write(N).
 
 move(X,Y) :-
     min(N),
     N1 is N + 1,
     (N>100->false;true),
     random(1,9,K),
-    (K = 1 -> (update1(X,Y, M, X_new, Y_new)->assert(visited(X_new,Y_new)),move(X_new,Y_new),retractall(min(_)),assert(min(N1)); move(X,Y));true),
-    (K = 2 -> (update2(X,Y, M, X_new, Y_new)->assert(visited(X_new,Y_new)),move(X_new,Y_new),retractall(min(_)),assert(min(N1)); move(X,Y));true),
-    (K = 3 -> (update3(X,Y, M, X_new, Y_new)->assert(visited(X_new,Y_new)),move(X_new,Y_new),retractall(min(_)),assert(min(N1)); move(X,Y));true),
-    (K = 4 -> (update4(X,Y, M, X_new, Y_new)->assert(visited(X_new,Y_new)),move(X_new,Y_new),retractall(min(_)),assert(min(N1)); move(X,Y));true),
-    (K = 5 -> (update5(X,Y, M, X_new, Y_new)->assert(visited(X_new,Y_new)),move(X_new,Y_new),retractall(min(_)),assert(min(N1)); move(X,Y));true),
-    (K = 6 -> (update6(X,Y, M, X_new, Y_new)->assert(visited(X_new,Y_new)),move(X_new,Y_new),retractall(min(_)),assert(min(N1)); move(X,Y));true),
-    (K = 7 -> (update7(X,Y, M, X_new, Y_new)->assert(visited(X_new,Y_new)),move(X_new,Y_new),retractall(min(_)),assert(min(N1)); move(X,Y));true),
-    (K = 8 -> (update8(X,Y, M, X_new, Y_new)->assert(visited(X_new,Y_new)),move(X_new,Y_new),retractall(min(_)),assert(min(N1)); move(X,Y));true).
+    (K = 1 -> (update1(X,Y, M, X_new, Y_new)->assert(visited(X_new,Y_new)),retractall(min(_)),assert(min(N1)),move(X_new,Y_new); move(X,Y));true),
+    (K = 2 -> (update2(X,Y, M, X_new, Y_new)->assert(visited(X_new,Y_new)),retractall(min(_)),assert(min(N1)),move(X_new,Y_new); move(X,Y));true),
+    (K = 3 -> (update3(X,Y, M, X_new, Y_new)->assert(visited(X_new,Y_new)),retractall(min(_)),assert(min(N1)),move(X_new,Y_new); move(X,Y));true),
+    (K = 4 -> (update4(X,Y, M, X_new, Y_new)->assert(visited(X_new,Y_new)),retractall(min(_)),assert(min(N1)),move(X_new,Y_new); move(X,Y));true),
+    (K = 5 -> (update5(X,Y, M, X_new, Y_new)->assert(visited(X_new,Y_new)),retractall(min(_)),assert(min(N1)),move(X_new,Y_new); move(X,Y));true),
+    (K = 6 -> (update6(X,Y, M, X_new, Y_new)->assert(visited(X_new,Y_new)),retractall(min(_)),assert(min(N1)),move(X_new,Y_new); move(X,Y));true),
+    (K = 7 -> (update7(X,Y, M, X_new, Y_new)->assert(visited(X_new,Y_new)),retractall(min(_)),assert(min(N1)),move(X_new,Y_new); move(X,Y));true),
+    (K = 8 -> (update8(X,Y, M, X_new, Y_new)->assert(visited(X_new,Y_new)),retractall(min(_)),assert(min(N1)),move(X_new,Y_new); move(X,Y));true).
 
 
 solve_problem :-
