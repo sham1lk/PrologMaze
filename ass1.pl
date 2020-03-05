@@ -50,7 +50,7 @@ move_left :-
 	ball_location([X,Y]),
 	X1 is X-1,
 	visited(VL),
-	(not(org_left), @>(X,0), \+(is_member([X1,Y],[VL])) ->
+	(not(org_left), @>(X,0), \+(member([X1,Y],[VL])) ->
 		move_to_left).
 
 move_to_left :-
