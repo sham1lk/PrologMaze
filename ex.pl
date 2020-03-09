@@ -111,7 +111,9 @@ print([[Move,(X_new,Y_new)]|Moves]) :-
 
 
 
-solve_problem :-
+
+solve_problem(Input) :-
+    consult(Input),
     set_prolog_flag(answer_write_options,[max_depth(0)]),
     statistics(runtime, [T0|_]),
     assert(min(1000)),    

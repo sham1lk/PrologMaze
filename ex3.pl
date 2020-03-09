@@ -124,14 +124,26 @@ dfs(X,Y, History, [[Move,(X_new,Y_new)]|Moves],K) :-
 
     dfs(X_new, Y_new, [(X_new,Y_new),(X_new1,Y_new1),(X_new2,Y_new2)|History], Moves,K1).
 
+print([]).
+print([[Move,(X_new,Y_new)]|Moves]) :-
+    (Move = 'pass_d';Move = 'pass_v';Move = 'pass_g' -> write("P ");true),
+    write(X_new), write(" "), write(Y_new),nl,
+    print(Moves).
 
-solve_problem(Last) :-
+
+
+solve_problem(Input) :-
+    consult(Input),
     set_prolog_flag(answer_write_options,[max_depth(0)]),
     statistics(runtime, [T0|_]),
     assert(min(1000)),    
     initial_state(X,Y),
     findall(Solution,dfs(X,Y, [(X,Y)], Solution,0),L),
     last(L,Last),
+    length(Last,V),
+    write(V),nl,
+    print(Last),
     statistics(runtime, [T1|_]), 
-    T is T1 - T0,
-    format('took ~3d sec.~n', [T]).
+   T2 is T1 - T0,
+   T is T2*1000,
+   format('took ~3d msec.~n', [T]).

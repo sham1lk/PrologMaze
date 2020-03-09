@@ -13,25 +13,25 @@ h(1,1).
 update1(  X, Y, right, X_new, Y  ) :-
     X_new is X + 1,
     legal(X_new,Y),
-    write("right to ("), write(X_new), write(","), write(Y), write_ln(")").
+    write(X_new), write(" "), write_ln(Y).
 
 % LEFT
 update2( X,Y, left, X_new, Y ) :-
     X_new is X - 1,
     legal(X_new,Y),
-     write("left to ("), write(X_new), write(","), write(Y), write_ln(")").
+    write(X_new), write(" "), write_ln(Y).
 
 % DOWN
 update3(  X,Y, down, X, Y_new  ) :-
     Y_new is Y - 1,
     legal(X,Y_new),
-    write("down to ("), write(X), write(","), write(Y_new), write_ln(")").
+    write(X), write(" "), write_ln(Y_new).
 
 % UP
 update4(  X,Y, up, X, Y_new  ) :-
     Y_new is Y + 1,
     legal(X,Y_new),
-     write("up to ("), write(X), write(","), write(Y_new), write_ln(")").
+    write(X), write(" "), write_ln(Y_new).
 
 % GORESONTAL PASS
 update5(  X,Y, pass_g, X, Y_new) :-
@@ -40,8 +40,7 @@ update5(  X,Y, pass_g, X, Y_new) :-
     Y_new is Y_any,
     legal(X,Y_new),
     not(pass(1)),
-     write("pass to ("), write(X), write(","), write(Y_new), write_ln(")").
-
+    write("P "), write(X), write(" "), write_ln(Y_new).
 % VERTICAL PASS
 update6(  X,Y, pass_v, X_new, Y) :-
     h(X_any,Y),
@@ -49,7 +48,7 @@ update6(  X,Y, pass_v, X_new, Y) :-
     X_new is X_any,
     legal(X_new,Y),
     not(pass(1)),
-     write("pass to ("), write(X_new), write(","), write(Y), write_ln(")").
+   write("P "), write(X_new), write(" "), write_ln(Y).
 
 
 % DIAGONAL PASS
@@ -63,7 +62,7 @@ update7( X,Y, pass_d, X_new,Y_new) :-
     Y_new is Y_any,
     legal(X_new,Y_new),
     not(pass(1)),
-     write("pass to ("), write(X_new), write(","), write(Y_new), write_ln(")").
+  write("P "), write(X_new), write(" "), write_ln(Y_new).
 
 update8( X,Y, pass_d, X_new,Y_new) :-
     h(X_any,Y_any),
@@ -75,7 +74,7 @@ update8( X,Y, pass_d, X_new,Y_new) :-
     Y_new is Y_any,
     legal(X_new,Y_new),
     not(pass(1)),
-     write("pass to ("), write(X_new), write(","), write(Y_new), write_ln(")").
+     write("P "), write(X_new), write(" "), write_ln(Y_new).
 
 
 
@@ -128,7 +127,8 @@ move(X,Y) :-
     (K = 8 -> (update8(X,Y, M, X_new, Y_new)-> assert(pass(1)),assert(visited(X_new,Y_new)),retractall(min(_)),assert(min(N1)),move(X_new,Y_new); move(X,Y));true).
 
 
-solve_problem :-
+solve_problem(Input) :-
+    consult(Input),
     set_prolog_flag(answer_write_options,[max_depth(0)]),
     statistics(runtime, [T0|_]),
     retractall(pass(_)),
