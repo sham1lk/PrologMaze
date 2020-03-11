@@ -127,7 +127,7 @@ move(X,Y) :-
     (K = 8 -> (update8(X,Y, M, X_new, Y_new)-> assert(pass(1)),assert(visited(X_new,Y_new)),retractall(min(_)),assert(min(N1)),move(X_new,Y_new); move(X,Y));true).
 
 
-solve_problem(Input) :-
+    letsplay(Input) :-
     consult(Input),
     set_prolog_flag(answer_write_options,[max_depth(0)]),
     statistics(runtime, [T0|_]),
